@@ -35,7 +35,7 @@ class Entity {
   }
 
   void showEllipse() {
-    ellipseMode(CORNER);
+    ellipseMode(CENTER);
     ellipse(position.x, position.y, size.x, size.y);
   }
 

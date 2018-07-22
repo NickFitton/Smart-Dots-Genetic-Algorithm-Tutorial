@@ -12,8 +12,11 @@ void setup() {
   background(255);
   textSize(20);
   drawStats();
-  obstacles = new Obstacle[1];
-  obstacles[0] = new Obstacle(new PVector(0, 300), new PVector(600, 10));
+  obstacles = new Obstacle[5];
+  for (int i=0; i<obstacles.length; i++) {
+    float size = random(10, 200);
+    obstacles[i] = new Obstacle(new PVector(random(0, width), random(300, 600)), new PVector(size, size), EntityType.ELLIPSE);
+  }
   test = new Population(1000);//create a new population with 1000 members
 }
 
@@ -29,7 +32,7 @@ void draw() {
   fill(0, 0, 255);
 
   for (int i=0; i<obstacles.length; i++) {
-    obstacles[0].showObstacle();
+    obstacles[i].showObstacle();
   }
 
   if (test.allDotsDead()) {
@@ -47,6 +50,15 @@ void draw() {
 void keyPressed() {
   if (key == ' ') {
     showBestOnly = !showBestOnly;
+  } else if (key == 'R' || key == 'r') {
+    generation = 0;
+    bestSteps = 0;
+    obstacles = new Obstacle[5];
+    for (int i=0; i<obstacles.length; i++) {
+      float size = random(10, 200);
+      obstacles[i] = new Obstacle(new PVector(random(0, width), random(300, 600)), new PVector(size, size), EntityType.ELLIPSE);
+    }
+    test = new Population(1000);//create a new population with 1000 members
   }
 }
 
@@ -54,8 +66,10 @@ void drawStats() {
   fill(225);
   noStroke();
   rect(0, 0, width, 100);
+  stroke(200);
+  line(0, 100, width, 100);
   fill(0);
-  text("Generation: " + generation, 10,30);
+  text("Generation: " + generation, 10, 30);
   if (showBestOnly) {
     text("Showing last best dot", 10, 55);
   }
