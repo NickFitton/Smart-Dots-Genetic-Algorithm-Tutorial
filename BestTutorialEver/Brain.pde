@@ -42,4 +42,14 @@ class Brain {
       }
     }
   }
+  
+  boolean hasStep() {
+    return step < directions.length;
+  }
+  
+  PVector nextStep() {
+    PVector nextDirection = directions[step];
+    step++;
+    return nextDirection;
+  }
 }

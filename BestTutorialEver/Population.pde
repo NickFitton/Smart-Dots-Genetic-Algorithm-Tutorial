@@ -2,7 +2,6 @@ class Population {
   Dot[] dots;
 
   float fitnessSum;
-  int gen = 1;
 
   int bestDot = 0;//the index of the best dot in the dots[]
 
@@ -10,7 +9,7 @@ class Population {
 
   Population(int size) {
     dots = new Dot[size];
-    for (int i = 0; i< size; i++) {
+    for (int i = size-1; i>=0; i--) {
       dots[i] = new Dot();
     }
   }
@@ -19,10 +18,13 @@ class Population {
   //------------------------------------------------------------------------------------------------------------------------------
   //show all dots
   void show() {
-    for (int i = 1; i< dots.length; i++) {
-      dots[i].show();
+    if (!showBestOnly) {
+      for (int i = 0; i< dots.length; i++) {
+        dots[i].showDot();
+      }
+    } else {
+      dots[0].showDot();
     }
-    dots[0].show();
   }
 
   //-------------------------------------------------------------------------------------------------------------------------------
@@ -30,9 +32,9 @@ class Population {
   void update() {
     for (int i = 0; i< dots.length; i++) {
       if (dots[i].brain.step > minStep) {//if the dot has already taken more steps than the best dot has taken to reach the goal
-        dots[i].dead = true;//then it dead
+        dots[i].isDead = true;//then it dead
       } else {
-        dots[i].update();
+        dots[i].update(obstacles);
       }
     }
   }
@@ -50,7 +52,7 @@ class Population {
   //returns whether all the dots are either dead or have reached the goal
   boolean allDotsDead() {
     for (int i = 0; i< dots.length; i++) {
-      if (!dots[i].dead && !dots[i].reachedGoal) { 
+      if (!dots[i].isDead && !dots[i].reachedGoal) { 
         return false;
       }
     }
@@ -80,7 +82,7 @@ class Population {
     }
 
     dots = newDots.clone();
-    gen ++;
+    generation++;
   }
 
 
@@ -143,7 +145,7 @@ class Population {
     //if this dot reached the goal then reset the minimum number of steps it takes to get to the goal
     if (dots[bestDot].reachedGoal) {
       minStep = dots[bestDot].brain.step;
-      println("step:", minStep);
+      bestSteps = minStep;
     }
   }
 }
